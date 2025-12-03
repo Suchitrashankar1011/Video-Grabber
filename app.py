@@ -99,7 +99,7 @@ def download_video(url, download_id):
             # Absolutely prevent any merging
             'nopostoverwrites': True,
             'prefer_free_formats': False,
-            # Anti-bot bypass for production
+            # Aggressive anti-bot bypass for production
             'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'referer': 'https://www.youtube.com/',
             'headers': {
@@ -107,13 +107,17 @@ def download_video(url, download_id):
                 'Accept-Language': 'en-us,en;q=0.5',
                 'Sec-Fetch-Mode': 'navigate',
             },
-            # Bypass bot detection
+            # Use Android client to bypass bot detection
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'web'],
-                    'skip': ['hls', 'dash']
+                    'player_client': ['android_creator'],
+                    'player_skip': ['webpage', 'configs'],
+                    'skip': ['hls', 'dash', 'translated_subs']
                 }
             },
+            # Additional bypass options
+            'nocheckcertificate': True,
+            'age_limit': None,
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
