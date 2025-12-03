@@ -194,9 +194,14 @@ def download_video(url, download_id):
         return True
         
     except Exception as e:
+        error_msg = str(e)
+        # Make bot detection errors more user-friendly
+        if 'Sign in to confirm' in error_msg or 'bot' in error_msg.lower():
+            error_msg = "YouTube is blocking this server. Try a different video or use the app locally. Cloud deployments have limitations due to YouTube's bot detection."
+        
         progress = {
             'status': 'error',
-            'message': str(e)
+            'message': error_msg
         }
         save_progress(download_id, progress)
         return False
