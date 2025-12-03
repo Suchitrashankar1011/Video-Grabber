@@ -236,6 +236,6 @@ def download_file(download_id, filename):
 
 if __name__ == '__main__':
     # Use environment variables for deployment flexibility
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 10000))
     debug = os.environ.get('DEBUG', 'False').lower() == 'true'
     app.run(debug=debug, host='0.0.0.0', port=port)
