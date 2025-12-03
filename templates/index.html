@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video Downloader</title>
+    <title>Video Grabber - Premium YouTube Downloader</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,178 +14,428 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
         }
 
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 40px;
-            max-width: 600px;
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 25s infinite;
+            border-radius: 50%;
+        }
+
+        .bg-animation span:nth-child(1) { left: 25%; animation-delay: 0s; }
+        .bg-animation span:nth-child(2) { left: 10%; animation-delay: 2s; animation-duration: 12s; }
+        .bg-animation span:nth-child(3) { left: 70%; animation-delay: 4s; }
+        .bg-animation span:nth-child(4) { left: 40%; animation-delay: 0s; animation-duration: 18s; }
+        .bg-animation span:nth-child(5) { left: 65%; animation-delay: 0s; }
+        .bg-animation span:nth-child(6) { left: 75%; animation-delay: 3s; }
+        .bg-animation span:nth-child(7) { left: 35%; animation-delay: 7s; }
+        .bg-animation span:nth-child(8) { left: 50%; animation-delay: 15s; animation-duration: 45s; }
+        .bg-animation span:nth-child(9) { left: 20%; animation-delay: 2s; animation-duration: 35s; }
+        .bg-animation span:nth-child(10) { left: 85%; animation-delay: 0s; animation-duration: 11s; }
+
+        @keyframes float {
+            0% {
+                bottom: -150px;
+                transform: translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 100%;
+                transform: translateX(-80px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Glassmorphism Container */
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 50px;
+            max-width: 650px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .header h1 {
-            color: #333;
-            font-size: 2.5em;
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
             margin-bottom: 10px;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.5);
+            }
         }
 
         .header p {
-            color: #666;
-            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            font-weight: 300;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            position: relative;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
+            margin-bottom: 10px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.95rem;
         }
 
         .url-input {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
+            padding: 18px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .url-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .url-input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         .download-btn {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 18px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 15px;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
         }
 
         .download-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.6);
+        }
+
+        .download-btn:active {
+            transform: translateY(-1px);
         }
 
         .download-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.7;
             cursor: not-allowed;
             transform: none;
         }
 
         .progress-container {
-            margin-top: 30px;
+            margin-top: 35px;
             display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .video-info {
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
             padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .video-info h3 {
-            color: #333;
-            margin-bottom: 10px;
+            color: white;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
         .video-details {
-            color: #666;
-            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
         .progress-bar {
             width: 100%;
-            height: 20px;
-            background: #e1e5e9;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            position: relative;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
             width: 0%;
-            transition: width 0.3s;
+            transition: width 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .progress-text {
             text-align: center;
-            color: #666;
-            font-size: 14px;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .status {
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
+            padding: 18px 20px;
+            border-radius: 15px;
+            margin-top: 25px;
             text-align: center;
-            font-weight: 600;
+            font-weight: 500;
+            animation: bounceIn 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         .status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: rgba(72, 187, 120, 0.2);
+            color: white;
+            border: 2px solid rgba(72, 187, 120, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .status.success a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 600;
         }
 
         .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: rgba(245, 101, 101, 0.2);
+            color: white;
+            border: 2px solid rgba(245, 101, 101, 0.5);
+            backdrop-filter: blur(10px);
         }
 
-        .emoji {
-            font-size: 1.2em;
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
             margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Cursor Trail Effect */
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+            z-index: 9999;
+            animation: cursorFade 0.5s ease-out forwards;
+        }
+
+        @keyframes cursorFade {
+            to {
+                opacity: 0;
+                transform: scale(2);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 35px 25px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
     <div class="container">
         <div class="header">
-            <h1>🎬 YouTube Downloader</h1>
-            <p>Download YouTube videos in MP4 format without FFmpeg</p>
+            <h1>🎬 Video Grabber</h1>
+            <p>Download YouTube videos with style</p>
         </div>
 
         <form id="downloadForm">
             <div class="input-group">
-                <label for="url">YouTube URL:</label>
+                <label for="url">YouTube URL</label>
                 <input 
                     type="text" 
                     id="url" 
                     class="url-input" 
-                    placeholder="https://www.youtube.com/watch?v=..."
+                    placeholder="Paste your YouTube link here..."
                     required
                 >
             </div>
             <button type="submit" class="download-btn" id="downloadBtn">
-                <span class="emoji">⬇️</span>Start Download
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                Start Download
             </button>
         </form>
 
@@ -191,8 +443,8 @@
             <div class="video-info" id="videoInfo" style="display: none;">
                 <h3 id="videoTitle"></h3>
                 <div class="video-details">
-                    <div>Duration: <span id="videoDuration"></span></div>
-                    <div>Resolution: <span id="videoResolution"></span></div>
+                    <div>⏱️ Duration: <span id="videoDuration"></span></div>
+                    <div>📺 Resolution: <span id="videoResolution"></span></div>
                 </div>
             </div>
 
@@ -214,15 +466,31 @@
         const progressText = document.getElementById('progressText');
         const status = document.getElementById('status');
 
+        // Cursor Trail Effect
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.8) {
+                const trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = e.clientX + 'px';
+                trail.style.top = e.clientY + 'px';
+                document.body.appendChild(trail);
+                setTimeout(() => trail.remove(), 500);
+            }
+        });
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const url = document.getElementById('url').value.trim();
             if (!url) return;
 
-            // Reset UI
             downloadBtn.disabled = true;
-            downloadBtn.innerHTML = '<span class="emoji">⏳</span>Starting...';
+            downloadBtn.innerHTML = `
+                <svg class="icon spinner" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+                Processing...
+            `;
             progressContainer.style.display = 'block';
             videoInfo.style.display = 'none';
             status.style.display = 'none';
@@ -230,7 +498,6 @@
             progressText.textContent = 'Preparing download...';
 
             try {
-                // Start download
                 const response = await fetch('/download', {
                     method: 'POST',
                     headers: {
@@ -245,7 +512,6 @@
                     throw new Error(data.error || 'Download failed');
                 }
 
-                // Poll for progress
                 pollProgress(data.download_id);
 
             } catch (error) {
@@ -316,9 +582,19 @@
             status.className = 'status success';
             
             if (progress && progress.download_url) {
-                status.innerHTML = `<span class="emoji">✅</span>Success! <a href="${progress.download_url}" style="color: #155724; text-decoration: underline;">Click here to download your video</a>`;
+                status.innerHTML = `
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Success! <a href="${progress.download_url}">Click here to download your video</a>
+                `;
             } else {
-                status.innerHTML = '<span class="emoji">✅</span>Success! Video downloaded successfully!';
+                status.innerHTML = `
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Success! Video downloaded successfully!
+                `;
             }
             
             status.style.display = 'block';
@@ -327,7 +603,12 @@
 
         function showError(message) {
             status.className = 'status error';
-            status.innerHTML = `<span class="emoji">❌</span>Error: ${message}`;
+            status.innerHTML = `
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                Error: ${message}
+            `;
             status.style.display = 'block';
             progressContainer.style.display = 'none';
             resetButton();
@@ -335,7 +616,12 @@
 
         function resetButton() {
             downloadBtn.disabled = false;
-            downloadBtn.innerHTML = '<span class="emoji">⬇️</span>Start Download';
+            downloadBtn.innerHTML = `
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                Start Download
+            `;
         }
     </script>
 </body>
